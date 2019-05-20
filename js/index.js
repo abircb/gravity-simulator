@@ -11,5 +11,5 @@
  *   [x, y] ::= 2-tuple
  * }
  *
- * The reason for using lists is in case I expand it to more dimensions
+ * The reason for using lists is for adding the possibility to expanding it to more dimensions
  */
