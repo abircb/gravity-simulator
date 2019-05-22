@@ -1,7 +1,3 @@
-const G = 6.6;  // Can be anything but this avoids working with small numbers
-
-// TODO: Collisions
-
 /**
  * Updates every object according to all of the forces
  * acting upon them
@@ -10,8 +6,8 @@ function updateObjects(objects) {
   forces = calculateForces(objects);
   for(let i = 0; i < objects.length; i++) {
     let force = multipleVectorOperation(forces[i], add); // Add all force vectors together
-    let acc = force / objects[i].mass;
-    let timediff = Date.now() - objects[i].lastTimeUpdated;
+    let acc = scalarOperation1(objects[i].mass, force, div);
+    let timeDiff = (Date.now() - objects[i].lastTimeUpdated)/SLOW_DOWN;
     let timeArray = initialiseArray(objects[i].velocity.length, timeDiff);
     let newVel = vectorOperation(timeArray, acc, mult);
     objects[i].velocity = vectorOperation(objects[i].velocity, newVel, add);
@@ -21,6 +17,8 @@ function updateObjects(objects) {
   }
   checkForCollisions(objects);
   checkForOutSideCanvas(objects);
+
+  return forces;
 }
 
 /**
@@ -36,8 +34,8 @@ function checkForCollisions(objects) {
         objects[i].radius = calculateRadius(objects[i].mass);
         relativeVelocityJ = (objects[j].mass * 1.0) / objects[i].mass;
         relativeVelocityI = 1.0 - relativeVelocityJ;
-        objects[i].velocity = vectorOperation(initialiseArray(objects[i].velocity.length, relativeVelocityI), objects[i].velocity, mult);
-        let velocityJ =  vectorOperation(initialiseArray(objects[j].velocity.length, relativeVelocityJ), objects[j].velocity, mult);
+        objects[i].velocity = scalarOperation(relativeVelocityI, objects[i].velocity, mult);
+        let velocityJ =  scalarOperation(relativeVelocityJ, objects[j].velocity, mult);
         objects[i].velocity = vectorOperation(objects[i].velocity, velocityJ, add);
         objects.splice(j, 1);
         j--;
@@ -51,17 +49,24 @@ function checkForCollisions(objects) {
  * This can be done by checking if the center of any 2 circles (x and y)
  * are more than r_x + r_y distance from each other
  */
-function detectCollision(obj1, objd2) {
+function detectCollision(obj1, obj2) {
   let subVec = vectorOperation(obj1.coord, obj2.coord, sub);
-  let distance = Math.sqrt(_.reduce(subVec, (sum, x) => sum + x * x));
+  let distance = getDistance(subVec);
   return distance < (obj1.radius + obj2.radius);
 }
 
 /**
- * If a node goes out of the canvas, turn it around
+ * If a node goes out of the canvas, turn it around.
+ * This is the only place where we assume the data to be 2D.
  */
 function checkForOutSideCanvas(objects) {
-
+  for(let i = 0; i < objects.length; i++) {
+    if(objects[i].coord[0] > MAX_COORD[0] || objects[i].coord[0] < 0) {
+      objects[i].velocity = [-objects[i].velocity[0], objects[i].velocity[1]];
+    } else if(objects[i].coord[1] > MAX_COORD[1] || objects[i].coord[1] < 0) {
+      objects[i].velocity = [objects[i].velocity[0], -objects[i].velocity[1]];
+    }
+  }
 }
 
 /**
@@ -73,11 +78,11 @@ function calculateForces(objects) {
   let result = initialise2DArray(objects.length);
   for(let i = 0; i < objects.length; i++) {
     for(let j = 0; j < objects.length; j++) {
-      if(i == j) { result[i][j] = 0; }
+      if(i == j) { result[i][j] = initialiseArray(objects[i].force.length, 0); }
       else if(result[i][j] !== undefined) { continue; }
       else {
-        result[i][j] = calculateForce(object[i], objects[j]);
-        result[j][i] = vectorOperation(initialiseArray(result[i][j].length, 0), result[i][j], sub);
+        result[j][i] = calculateForce(objects[i], objects[j]);
+        result[i][j] = _.map(result[j][i], x => -x);
       }
     }
   }
@@ -90,10 +95,18 @@ function calculateForces(objects) {
  */
 function calculateForce(obj1, obj2) {
   let subVec = vectorOperation(obj1.coord, obj2.coord, sub);
-  let distance = Math.sqrt(_.reduce(subVec, (sum, x) => sum + x * x));
-  let norVec = getNormalisedVector(subVec, distance);
-  let force = (G * obj1.mass * obj2.mass)/(distance * distance);
+  let distance = getDistance(subVec);
+  let norVec = distance === 0 ? initialiseArray(subVec.length, 0) : getNormalisedVector(subVec, distance);
+  let force = distance === 0 ? 0 : (G * obj1.mass * obj2.mass)/(distance * distance);
   return _.map(norVec, x => x * force);
+}
+
+function getDistance(v) {
+  let result = 0;
+  for(let i = 0; i < v.length; i++) {
+    result += v[i] * v[i];
+  }
+  return Math.sqrt(result);
 }
 
 /**
@@ -107,7 +120,7 @@ function getNormalisedVector(subVec, dist) {
  * Takes an array of vectors and adds them together
  */
 function multipleVectorOperation(vectors, op) {
-  _.reduce(vectors, (sum, x) => vectorOperation(sum, x, op));
+  return _.reduce(vectors, (sum, x) => vectorOperation(sum, x, op));
 }
 
 /**
@@ -121,6 +134,14 @@ function vectorOperation(v1, v2, op) {
     newV.push(op(v1[i] * 1.0, v2[i]));
   }
   return newV;
+}
+
+function scalarOperation(scalar, v, op) {
+  return _.map(v, x => op(scalar, x));
+}
+
+function scalarOperation1(scalar, v, op) {
+  return _.map(v, x => op(x, scalar));
 }
 
 /**
@@ -148,4 +169,8 @@ function add(x, y) {
 
 function mult(x, y) {
   return x * y;
+}
+
+function div(x, y) {
+  return y === 0 ? 0 : x/y;
 }

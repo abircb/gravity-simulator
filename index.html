@@ -1,11 +1,135 @@
 <!DOCTYPE html>
-<html lang="en" >
+<html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Gravity Simulator</title>
+  <style>
+    canvas {
+      background-color: #4c5a70;
+      margin: auto;
+      padding: 10px;
+    }
+    #input {
+      width: 100%;
+      margin: auto;
+    }
+    *, *:before, *:after {
+      box-sizing: border-box;
+    }
+    .slider {
+      width: 40%;
+      padding-left: 3%;
+    }
+    .slider-range {
+      -webkit-appearance: none;
+      width: calc(100% - (73px));
+      height: 10px;
+      border-radius: 5px;
+      background: #4c5a70;
+      padding: 0;
+      margin: 0;
+    }
+    .slider-range::-webkit-slider-thumb {
+      -webkit-appearance: none;
+              appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #2c3e50;
+      cursor: pointer;
+      -webkit-transition: background .15s ease-in-out;
+      transition: background .15s ease-in-out;
+    }
+    .slider-range::-webkit-slider-thumb:hover {
+      background: #4c5a70;
+    }
+    .slider-range:active::-webkit-slider-thumb {
+      background: #4c5a70;
+    }
+    .slider-range::-moz-range-thumb {
+      width: 20px;
+      height: 20px;
+      border: 0;
+      border-radius: 50%;
+      background: #2c3e50;
+      cursor: pointer;
+      -webkit-transition: background .15s ease-in-out;
+      transition: background .15s ease-in-out;
+    }
+    .slider-range::-moz-range-thumb:hover {
+      background: #4c5a70;
+    }
+    .slider-range:active::-moz-range-thumb {
+      background: #4c5a70;
+    }
+    .slider-value {
+      display: inline-block;
+      position: relative;
+      width: 60px;
+      color: #fff;
+      line-height: 20px;
+      text-align: center;
+      border-radius: 3px;
+      background: #2c3e50;
+      padding: 5px 10px;
+      margin-left: 8px;
+    }
+    .slider-value:after {
+      position: absolute;
+      top: 8px;
+      left: -7px;
+      width: 0;
+      height: 0;
+      border-top: 7px solid transparent;
+      border-right: 7px solid #2c3e50;
+      border-bottom: 7px solid transparent;
+      content: '';
+    }
+    ::-moz-range-track {
+      background: #d7dcdf;
+      border: 0;
+    }
+    input::-moz-focus-inner,
+    input::-moz-focus-outer {
+      border: 0;
+    }
+  </style>
 </head>
-
 <body>
+  <canvas id="canvas"></canvas>
 
+  <div id="input" align="center">
+    <label for="points">Amount Of Objects:</label>
+    <div class="slider">
+      <input class="slider-range" oninput="updateSliderValue(this)" onchange="reRunSim()" type="range" name="objects" id="objects" step="1" value="100" min="25" max="100">
+      <span class="slider-value">100</span>
+    </div>
+    <label for="points">Gravitational Constant:</label>
+    <div class="slider">
+      <input class="slider-range" oninput="updateSliderValue(this)" onchange="reRunSim()" type="range" name="g" id="g" step="0.1" value="0.2" min="0.1" max="1">
+      <span class="slider-value">0.2</span>
+    </div>
+    <label for="points">Slowdown factor:</label>
+    <div class="slider">
+      <input class="slider-range" oninput="updateSliderValue(this)" onchange="reRunSim()" type="range" name="slowdown" id="slowdown" step="1" value="25" min="1" max="50">
+      <span class="slider-value">25</span>
+    </div>
+  </div>
+
+  <script src="gravity.js" charset="utf-8"></script>
+  <script>
+    init();
+    function updateSliderValue(temp) {
+      temp.nextElementSibling.innerHTML = temp.value;
+    }
+    function reRunSim() {
+      var objects = document.getElementById("objects").value;
+      var g = document.getElementById("g").value;
+      var slowDown = document.getElementById("slowdown").value;
+      init("canvas", [window.innerWidth - 20, window.innerHeight * 0.8], objects, g, slowDown, true);
+    }
+  </script>
 </body>
-
 </html>
