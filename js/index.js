@@ -44,7 +44,7 @@ startSimulation();
  * @param  {Double} slowDown              [If the animation is too fact, slow it down by this factor]
  */
 function startSimulation(id = "canvas", size = [window.innerWidth - 20, window.innerHeight * 0.8], amountOfObjects = 100,
-  g = 0.2, slowDown = 25.0) {
+  g = 0.4, slowDown = 12.0) {
   canvas = document.getElementById(id);
   context = canvas.getContext("2d");
 
