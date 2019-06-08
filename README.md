@@ -3,6 +3,8 @@ A gravity simulator, built to understand how celestial bodies warp the fabric of
 Inspired by [particle.js](https://github.com/VincentGarreau/particles.js/) and the recently released photograph of a black hole 
 by the EHT research group.
 
+![screenshot](/screenshot.png)
+
 ## Usage
 Before using the simulator, define:
 <br />
