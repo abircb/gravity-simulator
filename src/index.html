@@ -1,5 +1,6 @@
   <!DOCTYPE html>
   <html lang="en">
+
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,22 +8,30 @@
     <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
     <title>Gravity Simulator</title>
     <style>
-      html, body, canvas {
+      html,
+      body,
+      canvas {
         background-color: #031635;
         margin: 0;
         padding: 0;
       }
+
       #input {
         width: 100%;
         margin: auto;
       }
-      *, *:before, *:after {
+
+      *,
+      *:before,
+      *:after {
         box-sizing: border-box;
       }
+
       .slider {
         width: 40%;
         padding-left: 3%;
       }
+
       .slider-range {
         -webkit-appearance: none;
         width: calc(100% - (73px));
@@ -32,9 +41,10 @@
         padding: 0;
         margin: 0;
       }
+
       .slider-range::-webkit-slider-thumb {
         -webkit-appearance: none;
-                appearance: none;
+        appearance: none;
         width: 20px;
         height: 20px;
         border-radius: 50%;
@@ -43,12 +53,15 @@
         -webkit-transition: background .15s ease-in-out;
         transition: background .15s ease-in-out;
       }
+
       .slider-range::-webkit-slider-thumb:hover {
         background: #000000;
       }
+
       .slider-range:active::-webkit-slider-thumb {
         background: #FFFFFF;
       }
+
       .slider-range::-moz-range-thumb {
         width: 20px;
         height: 20px;
@@ -59,12 +72,15 @@
         -webkit-transition: background .15s ease-in-out;
         transition: background .15s ease-in-out;
       }
+
       .slider-range::-moz-range-thumb:hover {
         background: #2c3e50;
       }
+
       .slider-range:active::-moz-range-thumb {
         background: #2c3e50;
       }
+
       .slider-value {
         display: inline-block;
         position: relative;
@@ -79,6 +95,7 @@
         font-family: 'Open Sans', sans-serif;
         font-size: 12px;
       }
+
       .slider-value:after {
         position: absolute;
         top: 8px;
@@ -90,10 +107,12 @@
         border-bottom: 7px solid transparent;
         content: '';
       }
+
       ::-moz-range-track {
         background: #000000;
         border: 0;
       }
+
       input::-moz-focus-inner,
       input::-moz-focus-outer {
         border: 0;
@@ -106,6 +125,7 @@
       }
     </style>
   </head>
+
   <body>
     <canvas id="canvas"></canvas>
     <div id="input" align="center">
@@ -133,6 +153,7 @@
       function updateSliderValue(temp) {
         temp.nextElementSibling.innerHTML = temp.value;
       }
+
       function reRunSim() {
         var objects = document.getElementById("objects").value;
         var g = document.getElementById("g").value;
@@ -141,4 +162,5 @@
       }
     </script>
   </body>
+
   </html>
