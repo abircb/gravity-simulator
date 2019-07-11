@@ -15,4 +15,4 @@ Before using the simulator, define:
 </ul>
 
 ## Demo 
-[here](https://abircb.github.io/projects/gravity-simulator/)
+[here](https://abircb.github.io/gravity-simulator/)
