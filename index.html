@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
     <title>Gravity Simulator</title>
     <style>
       html,
@@ -128,7 +129,12 @@
 
   <body>
     <canvas id="canvas"></canvas>
-    <div id="input" align="center">
+    <div id="info">
+      This is a gravity simulator, built to understand how celestial bodies warp the fabric of space-time and interact with each other.
+      Each particle represents a celestial body, and each line represents the gravitational force between two bodies.<br><br>
+      Adjust the sliders below to customise this galaxy <br><br><br>
+    </div>
+    <div id="input" align="center" style="width: 80%">
       <label for="points">Gravitational Constant:</label>
       <div class="slider">
         <input class="slider-range" oninput="updateSliderValue(this)" onchange="reRunSim()" type="range" name="g" id="g" step="0.1" value="0.4" min="0.1" max="1">
@@ -145,6 +151,10 @@
         <span class="slider-value">100</span>
       </div>
     </div>
+    <div id="info" style="padding-left: 90%;">
+    Powered by <a href="https://www.github.com/abircb/gravity-simulator" style="color: #FFFFFF; text-decoration: underline;" target="_blank">GitHub</a>
+    </div>
+
 
     <script src="g.min.js" charset="utf-8"></script>
     <script>

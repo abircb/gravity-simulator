@@ -1,0 +1,11 @@
+a{
+    position:relative;
+    z-index:9999;
+}
+
+#info {
+  padding-left: 80%;
+  font-size: 12px;
+  font-family: 'Avenir Next';
+  color: #FFFFFF;
+}
